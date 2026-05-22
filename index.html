@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketing Weekly Report Editor - Advanced Roofing</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -46,7 +47,7 @@
         .header-top {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -63,21 +64,19 @@
             display: inline-block;
         }
 
-        .company-badge {
-            background-color: #ffffff;
-            color: #0b2545;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            outline: none;
-            border: 1px dashed transparent;
+        /* Logo image styling integration */
+        .company-logo-container {
+            max-width: 180px;
+            height: auto;
+            display: flex;
+            align-items: center;
         }
-        .company-badge:focus {
-            border-color: #134074;
+
+        .company-logo-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
 
         /* Executive Summary Section */
@@ -114,7 +113,7 @@
             display: grid;
             grid-template-columns: 260px 1fr;
             gap: 30px;
-            padding: 10px 35px 40px 35px;
+            padding: 10px 35px 25px 35px;
         }
 
         @media (max-width: 680px) {
@@ -333,6 +332,19 @@
             border-color: rgba(255, 255, 255, 0.4);
         }
 
+        /* Chart Section Container at the bottom of the two columns */
+        .chart-section {
+            padding: 10px 35px 35px 35px;
+        }
+
+        .chart-wrapper {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+
         /* Instructions Banner at bottom */
         .editor-footer {
             background: rgba(0, 0, 0, 0.2);
@@ -347,15 +359,15 @@
 <body>
 
     <div class="report-container">
-        <!-- Header Section -->
         <header class="report-header">
             <div class="header-top">
                 <h1 class="report-title" contenteditable="true" spellcheck="false">Marketing Weekly Report 2026</h1>
-                <div class="company-badge" contenteditable="true" spellcheck="false">Advanced Roofing</div>
+                <div class="company-logo-container">
+                    <img src="img/logo.png" alt="Advanced Roofing Logo" onerror="this.style.display='none';">
+                </div>
             </div>
         </header>
 
-        <!-- Summary Section -->
         <section class="section-summary">
             <h2 class="section-title">Executive Summary</h2>
             <p class="summary-text" contenteditable="true" spellcheck="false">
@@ -363,10 +375,8 @@
             </p>
         </section>
 
-        <!-- Main Workspace Grid -->
         <div class="report-grid">
             
-            <!-- Left Side: Leads & Calculations -->
             <aside class="leads-sidebar">
                 <div class="sidebar-label">Leads</div>
                 
@@ -385,32 +395,30 @@
                     <div class="avg-leads-label">Contacts Needed on Campaign</div>
                 </div>
 
-                <!-- Interactive Daily Inputs -->
                 <table class="daily-breakdown">
                     <tr class="daily-row">
                         <td class="daily-label">Monday</td>
-                        <td class="daily-value daily-input" contenteditable="true" data-day="mon">1</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="0">1</td>
                     </tr>
                     <tr class="daily-row">
                         <td class="daily-label">Tuesday</td>
-                        <td class="daily-value daily-input" contenteditable="true" data-day="tue">7</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="1">6</td>
                     </tr>
                     <tr class="daily-row">
                         <td class="daily-label">Wednesday</td>
-                        <td class="daily-value daily-input" contenteditable="true" data-day="wed">6</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="2">8</td>
                     </tr>
                     <tr class="daily-row">
                         <td class="daily-label">Thursday</td>
-                        <td class="daily-value daily-input" contenteditable="true" data-day="thu">7</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="3">7</td>
                     </tr>
                     <tr class="daily-row">
                         <td class="daily-label">Friday</td>
-                        <td class="daily-value daily-input" contenteditable="true" data-day="fri">7</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="4">7</td>
                     </tr>
                 </table>
             </aside>
 
-            <!-- Right Side: Meta Campaigns Performance Metrics -->
             <section class="performance-section">
                 <div class="meta-campaigns-header">
                     <svg class="meta-icon" viewBox="0 0 24 24">
@@ -465,7 +473,12 @@
 
         </div>
 
-        <!-- Practical Footer Info -->
+        <section class="chart-section">
+            <div class="chart-wrapper">
+                <canvas id="leadsSplineChart" style="width: 100%; height: 220px;"></canvas>
+            </div>
+        </section>
+
         <footer class="editor-footer">
             Panel Interactivo y Editable en Vivo • Diseñado para Advanced Roofing Team • Haz clic en cualquier texto para modificarlo
         </footer>
@@ -478,28 +491,88 @@
             const avgLeadsEl = document.getElementById('avgLeads');
             const addRowBtn = document.getElementById('addRowBtn');
             const performanceTable = document.getElementById('performanceTable').getElementsByTagName('tbody')[0];
+            
+            let leadsChart;
 
-            // Real-time calculation logic for leads sidebar
+            // Initialize the Spline Smooth Chart matching your interface reference
+            function initChart() {
+                const ctx = document.getElementById('leadsSplineChart').getContext('2d');
+                
+                // Extraemos valores iniciales de la tabla
+                const currentData = Array.from(dailyInputs).map(input => parseInt(input.textContent.trim(), 10) || 0);
+
+                leadsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+                        datasets: [{
+                            label: 'Leads per Day',
+                            data: currentData,
+                            borderColor: '#0070f3',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#0051b3',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            tension: 0.4, // Suavizado spline cúbico curvado como la imagen
+                            fill: true,
+                            backgroundColor: (context) => {
+                                const bgColor = context.chart.ctx.createLinearGradient(0, 0, 0, 200);
+                                bgColor.addColorStop(0, 'rgba(0, 112, 243, 0.4)');
+                                bgColor.addColorStop(1, 'rgba(0, 112, 243, 0.0)');
+                                return bgColor;
+                            }
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#94a3b8', font: { weight: 'bold' }, stepSize: 2 }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#94a3b8', font: { weight: 'bold', size: 10, letterSpacing: 1 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Real-time calculation logic for leads sidebar & chart updating
             function calculateLeads() {
                 let total = 0;
                 let count = 0;
+                let updatedData = [];
 
                 dailyInputs.forEach(input => {
                     let val = parseInt(input.textContent.trim(), 10);
-                    if (!isNaN(val)) {
-                        total += val;
-                    }
+                    if (isNaN(val)) val = 0;
+                    
+                    total += val;
                     count++;
+                    updatedData.push(val);
                 });
 
                 totalLeadsEl.textContent = total;
                 
                 if (count > 0) {
                     let avg = total / count;
-                    // Format to 1 decimal place if it has fraction
                     avgLeadsEl.textContent = avg % 1 === 0 ? avg : avg.toFixed(1);
                 } else {
                     avgLeadsEl.textContent = '0';
+                }
+
+                // Update Chart live data synchronously
+                if (leadsChart) {
+                    leadsChart.data.datasets[0].data = updatedData;
+                    leadsChart.update();
                 }
             }
 
@@ -523,7 +596,6 @@
                 nameCell.className = 'perf-name';
                 nameCell.contentEditable = true;
                 nameCell.setAttribute('spellcheck', 'false');
-                nameCell.placeholder = 'Nueva Campaña / Métrica';
 
                 const totalCell = document.createElement('td');
                 totalCell.className = 'perf-total';
@@ -537,7 +609,8 @@
                 nameCell.focus();
             });
 
-            // Initial calculation run
+            // Run initial UI and core chart builds
+            initChart();
             calculateLeads();
         });
     </script>
