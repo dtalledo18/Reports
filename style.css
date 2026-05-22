@@ -1,0 +1,333 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #141414;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* Report Container */
+.report-container {
+    width: 100%;
+    max-width: 800px;
+    background: linear-gradient(135deg, #0b2545 0%, #001427 100%);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+}
+
+/* Header Banner */
+.report-header {
+    background: linear-gradient(rgba(11, 37, 69, 0.4), rgba(11, 37, 69, 0.85)), 
+                url('https://images.unsplash.com/photo-1632759162443-112880b8bd58?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    padding: 40px 35px;
+    position: relative;
+    border-bottom: 2px solid #134074;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.report-title {
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    color: #ffffff;
+    outline: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.3);
+    display: inline-block;
+}
+
+.company-logo-container {
+    max-width: 180px;
+    height: auto;
+    display: flex;
+    align-items: center;
+}
+
+.company-logo-container img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+/* Executive Summary Section */
+.section-summary {
+    padding: 30px 35px 20px 35px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #eef4ed;
+    text-transform: capitalize;
+}
+
+.summary-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin: 0;
+    outline: none;
+    border-radius: 4px;
+    padding: 6px;
+    transition: background 0.2s;
+}
+
+.summary-text:focus, .report-title:focus, [contenteditable="true"]:focus {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 2px #0070f3;
+}
+
+/* 50/50 Grid */
+.report-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 20px 35px 20px 35px;
+    align-items: start;
+}
+
+@media (max-width: 680px) {
+    .report-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}
+
+/* Left Side Hero Box (Leads) */
+.leads-hero-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 35px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.sidebar-label {
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffd166;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.main-stat-box {
+    margin-bottom: 15px;
+}
+
+.total-leads-value {
+    font-size: 54px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.date-sub-label {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-top: 8px;
+    text-transform: uppercase;
+    outline: none;
+}
+
+.stat-separator {
+    width: 60px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 15px 0;
+}
+
+.avg-leads-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.avg-leads-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+}
+
+.contacts-needed-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+    outline: none;
+}
+
+/* Right Side Meta Performance */
+.meta-simplified-section {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+.meta-brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 30px;
+}
+
+.meta-icon {
+    width: 36px;
+    height: 36px;
+    fill: #1877f2;
+    margin-bottom: 8px;
+}
+
+.meta-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #ffd166;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.perf-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.perf-table th {
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffd166;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.perf-table th.col-total {
+    text-align: right;
+}
+
+.perf-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.perf-name {
+    padding: 16px 0;
+    font-size: 14px;
+    color: #e2e8f0;
+    font-weight: 500;
+    outline: none;
+}
+
+.perf-total {
+    padding: 16px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: right;
+    outline: none;
+}
+
+/* 📊 SECCIÓN DE GRÁFICA COMPARTIDA COMPLETA */
+.chart-section {
+    padding: 20px 35px 35px 35px;
+}
+
+.chart-wrapper {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 30px 25px 20px 25px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+}
+
+/* Contenedor de columnas de datos editables encima de la curva */
+.chart-data-header {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    text-align: center;
+    margin-bottom: 15px;
+    padding-left: 45px; /* Compensa el espacio del eje Y numérico de la gráfica */
+}
+
+.day-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.day-column:last-child {
+    border-right: none;
+}
+
+.day-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    outline: none;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.day-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0070f3;
+    outline: none;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.day-value:focus, .day-label:focus {
+    background: rgba(0, 112, 243, 0.15);
+    color: #ffffff;
+}
+
+.canvas-container {
+    position: relative;
+    height: 240px;
+    width: 100%;
+}
+
+/* Footer */
+.editor-footer {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px 35px;
+    font-size: 11px;
+    color: #64748b;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
