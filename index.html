@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Weekly Report Editor - Advanced Roofing</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #141414;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Report Container */
+        .report-container {
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(135deg, #0f3057 0%, #001427 100%);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        /* Header Banner */
+        .report-header {
+            background: linear-gradient(rgba(11, 37, 69, 0.6), rgba(11, 37, 69, 0.85)), 
+                        url('https://images.unsplash.com/photo-1632759162443-112880b8bd58?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            padding: 40px 35px;
+            position: relative;
+            border-bottom: 2px solid #134074;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .report-title {
+            font-size: 28px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            color: #ffffff;
+            outline: none;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            display: inline-block;
+        }
+
+        .company-badge {
+            background-color: #ffffff;
+            color: #0b2545;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            outline: none;
+            border: 1px dashed transparent;
+        }
+        .company-badge:focus {
+            border-color: #134074;
+        }
+
+        /* Executive Summary Section */
+        .section-summary {
+            padding: 30px 35px 20px 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #eef4ed;
+            text-transform: capitalize;
+        }
+
+        .summary-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin: 0;
+            outline: none;
+            border-radius: 4px;
+            padding: 6px;
+            transition: background 0.2s;
+        }
+        .summary-text:focus, .report-title:focus, [contenteditable="true"]:focus {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 2px #134074;
+        }
+
+        /* Content Layout Grid */
+        .report-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 30px;
+            padding: 10px 35px 40px 35px;
+        }
+
+        @media (max-width: 680px) {
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Column: Leads Widget */
+        .leads-sidebar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sidebar-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #ffd166;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .main-stat-box {
+            margin-bottom: 20px;
+        }
+
+        .total-leads-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .date-sub-label {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-top: 5px;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        .avg-leads-box {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+
+        .avg-leads-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .avg-leads-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .contacts-needed-box {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .contacts-needed-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+            outline: none;
+        }
+
+        /* Daily Breakdown Table inside Sidebar */
+        .daily-breakdown {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: auto;
+        }
+
+        .daily-row {
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .daily-label {
+            text-align: left;
+            padding: 8px 5px;
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .daily-value {
+            text-align: right;
+            padding: 8px 5px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            width: 50px;
+            outline: none;
+        }
+
+        /* Right Column: Performance Table */
+        .performance-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-campaigns-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .meta-icon {
+            width: 24px;
+            height: 24px;
+            fill: #1877f2;
+        }
+
+        .meta-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #ffd166;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .perf-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .perf-table th {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #ffd166;
+            padding-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .perf-table th.col-total {
+            text-align: right;
+        }
+
+        .perf-row {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.2s;
+        }
+        
+        .perf-row:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .perf-name {
+            padding: 12px 0;
+            font-size: 13px;
+            color: #e2e8f0;
+            font-weight: 500;
+            outline: none;
+            line-height: 1.4;
+        }
+
+        .perf-total {
+            padding: 12px 0;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: right;
+            outline: none;
+            white-space: nowrap;
+        }
+
+        /* Action Row for Dynamics */
+        .action-row {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
+        .btn-add {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            color: #94a3b8;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Instructions Banner at bottom */
+        .editor-footer {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px 35px;
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="report-container">
+        <!-- Header Section -->
+        <header class="report-header">
+            <div class="header-top">
+                <h1 class="report-title" contenteditable="true" spellcheck="false">Marketing Weekly Report 2026</h1>
+                <div class="company-badge" contenteditable="true" spellcheck="false">Advanced Roofing</div>
+            </div>
+        </header>
+
+        <!-- Summary Section -->
+        <section class="section-summary">
+            <h2 class="section-title">Executive Summary</h2>
+            <p class="summary-text" contenteditable="true" spellcheck="false">
+                This report is based on campaign performance from <strong>May 18th through May 22th</strong>. All figures and analysis correspond to this reporting period. The corresponding invoices are attached at the end of this document for reference.
+            </p>
+        </section>
+
+        <!-- Main Workspace Grid -->
+        <div class="report-grid">
+            
+            <!-- Left Side: Leads & Calculations -->
+            <aside class="leads-sidebar">
+                <div class="sidebar-label">Leads</div>
+                
+                <div class="main-stat-box">
+                    <div class="total-leads-value" id="totalLeads">28</div>
+                    <div class="date-sub-label" contenteditable="true" spellcheck="false">(Lun 18 - Fri 22)</div>
+                </div>
+
+                <div class="avg-leads-box">
+                    <div class="avg-leads-value" id="avgLeads">5.6</div>
+                    <div class="avg-leads-label">Average Daily Leads</div>
+                </div>
+
+                <div class="contacts-needed-box">
+                    <div class="contacts-needed-value" contenteditable="true" spellcheck="false">22.3k</div>
+                    <div class="avg-leads-label">Contacts Needed on Campaign</div>
+                </div>
+
+                <!-- Interactive Daily Inputs -->
+                <table class="daily-breakdown">
+                    <tr class="daily-row">
+                        <td class="daily-label">Monday</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="mon">1</td>
+                    </tr>
+                    <tr class="daily-row">
+                        <td class="daily-label">Tuesday</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="tue">7</td>
+                    </tr>
+                    <tr class="daily-row">
+                        <td class="daily-label">Wednesday</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="wed">6</td>
+                    </tr>
+                    <tr class="daily-row">
+                        <td class="daily-label">Thursday</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="thu">7</td>
+                    </tr>
+                    <tr class="daily-row">
+                        <td class="daily-label">Friday</td>
+                        <td class="daily-value daily-input" contenteditable="true" data-day="fri">7</td>
+                    </tr>
+                </table>
+            </aside>
+
+            <!-- Right Side: Meta Campaigns Performance Metrics -->
+            <section class="performance-section">
+                <div class="meta-campaigns-header">
+                    <svg class="meta-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.477 2 2 6.477 2 12c0 5.011 3.69 9.154 8.54 9.873v-6.984H7.995V12h2.545V9.412c0-2.512 1.496-3.899 3.783-3.899 1.096 0 2.242.196 2.242.196v2.464h-1.262c-1.244 0-1.63.772-1.63 1.562V12h2.778l-.444 2.889h-2.334v6.984C18.31 21.154 22 17.011 22 12c0-5.523-4.477-10-10-10z"/>
+                    </svg>
+                    <h3 class="meta-title" contenteditable="true" spellcheck="false">Meta Campaigns:</h3>
+                </div>
+
+                <table class="perf-table" id="performanceTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 70%;">Performance</th>
+                            <th class="col-total" style="width: 30%;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">MET</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false">137 USD</td>
+                        </tr>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">Blue Badge Twitter (X)</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false">4 USD</td>
+                        </tr>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">Runway for IA Videos</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false">35 USD</td>
+                        </tr>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">Voyage for SMS (Pendant for verification)</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false">10 USD</td>
+                        </tr>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">Voyage for SMS (Pendant for verification)</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false"></td>
+                        </tr>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">Jobs Done</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false"></td>
+                        </tr>
+                        <tr class="perf-row">
+                            <td class="perf-name" contenteditable="true" spellcheck="false">Contacts</td>
+                            <td class="perf-total" contenteditable="true" spellcheck="false"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="action-row">
+                    <button class="btn-add" id="addRowBtn">+ Agregar Fila</button>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Practical Footer Info -->
+        <footer class="editor-footer">
+            Panel Interactivo y Editable en Vivo • Diseñado para Advanced Roofing Team • Haz clic en cualquier texto para modificarlo
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dailyInputs = document.querySelectorAll('.daily-input');
+            const totalLeadsEl = document.getElementById('totalLeads');
+            const avgLeadsEl = document.getElementById('avgLeads');
+            const addRowBtn = document.getElementById('addRowBtn');
+            const performanceTable = document.getElementById('performanceTable').getElementsByTagName('tbody')[0];
+
+            // Real-time calculation logic for leads sidebar
+            function calculateLeads() {
+                let total = 0;
+                let count = 0;
+
+                dailyInputs.forEach(input => {
+                    let val = parseInt(input.textContent.trim(), 10);
+                    if (!isNaN(val)) {
+                        total += val;
+                    }
+                    count++;
+                });
+
+                totalLeadsEl.textContent = total;
+                
+                if (count > 0) {
+                    let avg = total / count;
+                    // Format to 1 decimal place if it has fraction
+                    avgLeadsEl.textContent = avg % 1 === 0 ? avg : avg.toFixed(1);
+                } else {
+                    avgLeadsEl.textContent = '0';
+                }
+            }
+
+            // Attach input event to recalculate whenever user changes a daily metric
+            dailyInputs.forEach(input => {
+                input.addEventListener('input', calculateLeads);
+                // Sanitize input to allow only digits
+                input.addEventListener('keypress', (e) => {
+                    if (!/\d/.test(e.key) && e.key !== 'Enter') {
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            // Dynamically add a new blank performance row
+            addRowBtn.addEventListener('click', () => {
+                const newRow = document.createElement('tr');
+                newRow.className = 'perf-row';
+
+                const nameCell = document.createElement('td');
+                nameCell.className = 'perf-name';
+                nameCell.contentEditable = true;
+                nameCell.setAttribute('spellcheck', 'false');
+                nameCell.placeholder = 'Nueva Campaña / Métrica';
+
+                const totalCell = document.createElement('td');
+                totalCell.className = 'perf-total';
+                totalCell.contentEditable = true;
+                totalCell.setAttribute('spellcheck', 'false');
+
+                newRow.appendChild(nameCell);
+                newRow.appendChild(totalCell);
+                performanceTable.appendChild(newRow);
+
+                nameCell.focus();
+            });
+
+            // Initial calculation run
+            calculateLeads();
+        });
+    </script>
+</body>
+</html>
