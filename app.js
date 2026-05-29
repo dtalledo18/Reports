@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Helpers ──────────────────────────────────────────────
 
     function getHistoricalTotal() {
-        return WEEKS_DATA.reduce((sum, w) => {
+        return WEEKS_DATA.reduce((sum, w, idx) => {
+            if (idx === currentWeekIdx) {
+                return sum + getLiveLeadsFromDOM().reduce((s, v) => s + v, 0);
+            }
             return sum + w.days.reduce((s, d) => s + (parseInt(d.leads) || 0), 0);
         }, 0);
     }
@@ -51,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const avg     = values.length ? total / values.length : 0;
 
         weeklyLeads.textContent = total;
-        historicalLeads.textContent = getHistoricalTotal(); // reflects JSON; for full reactivity across weeks extend as needed
+        historicalLeads.textContent = getHistoricalTotal();
         avgLeads.textContent = Number.isInteger(avg) ? avg : avg.toFixed(1);
     }
 
