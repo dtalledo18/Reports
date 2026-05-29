@@ -3,54 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketing Weekly Report Editor - Advanced Roofing</title>
+    <title>Marketing Weekly Report - Advanced Roofing</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <div class="report-container">
+<div class="report-container">
+
+    <!-- ── WEEK SELECTOR BAR ──────────────────────────────── -->
+    <div class="week-selector-bar">
+        <span class="selector-label">Week:</span>
+        <div class="selector-wrapper">
+            <select id="weekSelect" class="week-select"></select>
+            <svg class="select-arrow" viewBox="0 0 10 6" fill="none">
+                <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <span class="week-badge" id="weekBadge"></span>
+    </div>
+
+    <!-- ── REPORT CARD ────────────────────────────────────── -->
+    <div class="report-card-wrap">
+
+        <!-- Header -->
         <header class="report-header">
             <div class="header-top">
-                <h1 class="report-title" contenteditable="true" spellcheck="false">Marketing Weekly Report 2026</h1>
+                <h1 class="report-title">Marketing Weekly Report 2026</h1>
                 <div class="company-logo-container">
-                    <img src="img/logo.png" alt="Advanced Roofing Logo" onerror="this.style.display='none';">
+                    <img src="img/logo.png" alt="Advanced Roofing Logo" onerror="this.style.display='none'">
                 </div>
             </div>
         </header>
 
+        <!-- Executive Summary -->
         <section class="section-summary">
             <h2 class="section-title">Executive Summary</h2>
-            <p class="summary-text" contenteditable="true" spellcheck="false">
-                This report is based on campaign performance from <strong>May 18th through May 22th</strong>. All figures and analysis correspond to this reporting period. The corresponding invoices are attached at the end of this document for reference.
-            </p>
+            <p class="summary-text" id="summaryText"></p>
         </section>
 
+        <!-- Main Grid: Leads + Meta -->
         <div class="report-grid">
-            
+
+            <!-- LEFT: Leads Hero Card -->
             <div class="leads-hero-card">
-                <div class="sidebar-label">Leads</div>
-                
-                <div class="main-stat-box">
-                    <div class="total-leads-value" id="totalLeads">28</div>
-                    <div class="date-sub-label" contenteditable="true" spellcheck="false">(LUN 18–FRI 22)</div>
+                <div class="leads-comparison-grid">
+                    <div class="stat-group">
+                        <div class="sidebar-label">Historical Leads</div>
+                        <div class="main-stat-box">
+                            <div class="total-leads-value" id="historicalLeads">—</div>
+                            <div class="date-sub-label" id="historicalRange"></div>
+                        </div>
+                    </div>
+                    <div class="stat-group">
+                        <div class="sidebar-label">Weekly Leads</div>
+                        <div class="main-stat-box">
+                            <div class="total-leads-value" id="weeklyLeads">—</div>
+                            <div class="date-sub-label" id="weeklyRange"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="stat-separator"></div>
 
-                <div class="main-stat-box">
-                    <div class="avg-leads-value" id="avgLeads">5.6</div>
-                    <div class="avg-leads-label">Average Daily Leads</div>
-                </div>
-
-                <div class="stat-separator"></div>
-
-                <div class="main-stat-box">
-                    <div class="contacts-needed-value" contenteditable="true" spellcheck="false">22.3k</div>
-                    <div class="avg-leads-label">Contacts Needed on Campaign</div>
+                <div class="metrics-row">
+                    <div class="stat-group">
+                        <div class="avg-leads-value" id="avgLeads">—</div>
+                        <div class="avg-leads-label">Avg. Daily Leads</div>
+                    </div>
+                    <div class="stat-group">
+                        <input type="text" class="contacts-needed-input" id="contactsNeeded" value="—" spellcheck="false">
+                        <div class="avg-leads-label">Contacts Needed</div>
+                    </div>
                 </div>
             </div>
 
+            <!-- RIGHT: Meta Performance -->
             <div class="meta-simplified-section">
                 <div class="meta-brand-header">
                     <svg class="meta-icon" viewBox="0 0 24 24">
@@ -66,160 +94,35 @@
                             <th class="col-total">TOTAL</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="perf-row">
-                            <td class="perf-name" contenteditable="true" spellcheck="false">Reach</td>
-                            <td class="perf-total" contenteditable="true" spellcheck="false">46.3k</td>
-                        </tr>
-                        <tr class="perf-row">
-                            <td class="perf-name" contenteditable="true" spellcheck="false">Frequency</td>
-                            <td class="perf-total" contenteditable="true" spellcheck="false">1.78</td>
-                        </tr>
-                        <tr class="perf-row">
-                            <td class="perf-name" contenteditable="true" spellcheck="false">Impressions</td>
-                            <td class="perf-total" contenteditable="true" spellcheck="false">21.4k</td>
-                        </tr>
+                    <tbody id="metaTableBody">
+                        <!-- Injected by app.js -->
                     </tbody>
                 </table>
             </div>
 
         </div>
 
+        <!-- Chart Section -->
         <section class="chart-section">
             <div class="chart-wrapper">
-                
-                <div class="chart-data-header">
-                    <div class="day-column">
-                        <span class="day-label" contenteditable="true" spellcheck="false">MONDAY</span>
-                        <span class="day-value dynamic-input" contenteditable="true" spellcheck="false">01</span>
-                    </div>
-                    <div class="day-column">
-                        <span class="day-label" contenteditable="true" spellcheck="false">TUESDAY</span>
-                        <span class="day-value dynamic-input" contenteditable="true" spellcheck="false">07</span>
-                    </div>
-                    <div class="day-column">
-                        <span class="day-label" contenteditable="true" spellcheck="false">WEDNESDAY</span>
-                        <span class="day-value dynamic-input" contenteditable="true" spellcheck="false">06</span>
-                    </div>
-                    <div class="day-column">
-                        <span class="day-label" contenteditable="true" spellcheck="false">THURSDAY</span>
-                        <span class="day-value dynamic-input" contenteditable="true" spellcheck="false">07</span>
-                    </div>
-                    <div class="day-column">
-                        <span class="day-label" contenteditable="true" spellcheck="false">FRIDAY</span>
-                        <span class="day-value dynamic-input" contenteditable="true" spellcheck="false">05</span>
-                    </div>
+                <div class="chart-data-header" id="daysHeader">
+                    <!-- Injected by app.js -->
                 </div>
-
                 <div class="canvas-container">
-                    <canvas id="leadsSplineChart"></canvas>
+                    <canvas id="leadsSplineChart" role="img" aria-label="Daily leads chart for the selected week"></canvas>
                 </div>
             </div>
         </section>
 
         <footer class="editor-footer">
-            Live Interactive and Editable Panel • Designed for Advanced Roofing Team • Click on any text to modify it
+            Live Interactive & Editable Panel · Advanced Roofing Team · Select a week · Edit any value directly
         </footer>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dynamicInputs = document.querySelectorAll('.dynamic-input');
-            const dayLabels = document.querySelectorAll('.day-label');
-            const totalLeadsEl = document.getElementById('totalLeads');
-            const avgLeadsEl = document.getElementById('avgLeads');
-            let leadsChart;
+    </div><!-- /.report-card-wrap -->
 
-            // Extrae la data numérica de los inputs de la UI
-            function getChartData() {
-                return Array.from(dynamicInputs).map(input => parseInt(input.textContent.trim(), 10) || 0);
-            }
+</div><!-- /.report-container -->
 
-            // Extrae los nombres de los días de la UI de forma dinámica
-            function getChartLabels() {
-                return Array.from(dayLabels).map(label => label.textContent.trim());
-            }
-
-            // Recalcula los totales matemáticos en la tarjeta de Leads de la izquierda
-            function updateLeadsMetrics() {
-                const dataValues = getChartData();
-                const total = dataValues.reduce((sum, current) => sum + current, 0);
-                const avg = total / dataValues.length;
-
-                totalLeadsEl.textContent = total;
-                avgLeadsEl.textContent = avg % 1 === 0 ? avg : avg.toFixed(1);
-            }
-
-            // Inicializa la gráfica Spline sincronizada
-            function initChart() {
-                const ctx = document.getElementById('leadsSplineChart').getContext('2d');
-                
-                leadsChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: getChartLabels(),
-                        datasets: [{
-                            label: 'Leads per Day',
-                            data: getChartData(),
-                            borderColor: '#0070f3',
-                            borderWidth: 4,
-                            pointBackgroundColor: '#ffffff',
-                            pointBorderColor: '#0070f3',
-                            pointBorderWidth: 3,
-                            pointRadius: 6,
-                            pointHoverRadius: 8,
-                            tension: 0.43, // Curvatura spline fluida e idéntica a la UI original
-                            fill: true,
-                            backgroundColor: (context) => {
-                                const chart = context.chart;
-                                const {ctx, chartArea} = chart;
-                                if (!chartArea) return null;
-                                const bgColor = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                                bgColor.addColorStop(0, 'rgba(0, 112, 243, 0.35)');
-                                bgColor.addColorStop(1, 'rgba(0, 112, 243, 0.0)');
-                                return bgColor;
-                            }
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
-                                ticks: { color: '#3b82f6', font: { weight: 'bold', size: 16 }, stepSize: 2 }
-                            },
-                            x: {
-                                display: false // Ocultamos los labels nativos de Chart.js porque ya usamos los del DOM arriba
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Escucha cambios en tiempo real en los números o días editables
-            dynamicInputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    leadsChart.data.datasets[0].data = getChartData();
-                    leadsChart.update();
-                    updateLeadsMetrics();
-                });
-            });
-
-            dayLabels.forEach(label => {
-                label.addEventListener('input', () => {
-                    leadsChart.data.labels = getChartLabels();
-                    leadsChart.update();
-                });
-            });
-
-            // Inicializar al cargar
-            initChart();
-            updateLeadsMetrics();
-        });
-    </script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
