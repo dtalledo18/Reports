@@ -42,6 +42,25 @@ const WEEKS_DATA = [
             { name: "THURSDAY",  leads: 2 },
             { name: "FRIDAY",    leads: 9 }
         ]
+    },
+    {
+        id: "w3",
+        label: "Week 3 — Jun 1–5",
+        range: "June 1st through June 5th",
+        shortRange: "MON 1 – FRI 5",
+        contactsNeeded: "22.5k",
+        meta: [
+            { name: "Reach",        value: "71.3k" },
+            { name: "Frequency",    value: "1.98"  },
+            { name: "Impressions",  value: "20.3k" }
+        ],
+        days: [
+            { name: "MONDAY",    leads: 5 },
+            { name: "TUESDAY",   leads: 3 },
+            { name: "WEDNESDAY", leads: 4 },
+            { name: "THURSDAY",  leads: 9 },
+            { name: "FRIDAY",    leads: 6 }
+        ]
     }
 
     // ── ADD MORE WEEKS HERE ──────────────────────────────────────
