@@ -95,9 +95,9 @@ const WEEKS_DATA = [
         days: [
             { name: "Monday",    leads: 10 },
             { name: "Tuesday",   leads: 10 },
-            { name: "Wednesday", leads: 9  },
-            { name: "Thursday",  leads: 9  },
-            { name: "Friday",    leads: 9  }
+            { name: "Wednesday", leads: 10  },
+            { name: "Thursday",  leads: 10  },
+            { name: "Friday",    leads: 7  }
         ]
     }
 
